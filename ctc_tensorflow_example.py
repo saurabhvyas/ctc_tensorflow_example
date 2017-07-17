@@ -46,10 +46,13 @@ momentum = 0.9
 num_examples = 1
 num_batches_per_epoch = int(num_examples/batch_size)
 
+
+
+
 # Loading the data
 
-audio_filename = maybe_download('LDC93S1.wav', 93638)
-target_filename = maybe_download('LDC93S1.txt', 62)
+audio_filename = maybe_download('red.wav', 96044)
+target_filename = maybe_download('red.txt', 12)
 
 fs, audio = wav.read(audio_filename)
 
@@ -69,6 +72,7 @@ with open(target_filename, 'r') as f:
     original = ' '.join(line.strip().lower().split(' ')[2:]).replace('.', '')
     targets = original.replace(' ', '  ')
     targets = targets.split(' ')
+    print ( targets )
 
 # Adding blank label
 targets = np.hstack([SPACE_TOKEN if x == '' else list(x) for x in targets])
@@ -105,10 +109,10 @@ with graph.as_default():
     # Can be:
     #   tf.nn.rnn_cell.RNNCell
     #   tf.nn.rnn_cell.GRUCell
-    cell = tf.nn.rnn_cell.LSTMCell(num_hidden, state_is_tuple=True)
+    cell = tf.contrib.rnn.BasicLSTMCell(num_hidden, state_is_tuple=True)
 
     # Stacking rnn cells
-    stack = tf.nn.rnn_cell.MultiRNNCell([cell] * num_layers,
+    stack =  tf.contrib.rnn.MultiRNNCell([cell] * num_layers,
                                         state_is_tuple=True)
 
     # The second output is the last state and we will no use that
@@ -139,7 +143,7 @@ with graph.as_default():
     # Time major
     logits = tf.transpose(logits, (1, 0, 2))
 
-    loss = ctc_ops.ctc_loss(logits, targets, seq_len)
+    loss = ctc_ops.ctc_loss( targets, logits , seq_len)
     cost = tf.reduce_mean(loss)
 
     optimizer = tf.train.MomentumOptimizer(initial_learning_rate,
@@ -153,9 +157,18 @@ with graph.as_default():
     ler = tf.reduce_mean(tf.edit_distance(tf.cast(decoded[0], tf.int32),
                                           targets))
 
+    saver = tf.train.Saver()
+
 with tf.Session(graph=graph) as session:
     # Initializate the weights and biases
-    tf.initialize_all_variables().run()
+    init_op = tf.global_variables_initializer()
+
+    #tf.initialize_all_variables().run()
+    session.run(init_op)
+    #save_path = saver.save(session, "model.ckpt")
+    #print("Model saved in file: %s" % save_path)
+    saver.restore(session, "model.ckpt")
+    print("Model restored.")
 
 
     for curr_epoch in range(num_epochs):
@@ -180,6 +193,8 @@ with tf.Session(graph=graph) as session:
                     seq_len: val_seq_len}
 
         val_cost, val_ler = session.run([cost, ler], feed_dict=val_feed)
+        
+
 
         log = "Epoch {}/{}, train_cost = {:.3f}, train_ler = {:.3f}, val_cost = {:.3f}, val_ler = {:.3f}, time = {:.3f}"
         print(log.format(curr_epoch+1, num_epochs, train_cost, train_ler,
@@ -191,6 +206,8 @@ with tf.Session(graph=graph) as session:
     str_decoded = str_decoded.replace(chr(ord('z') + 1), '')
     # Replacing space label to space
     str_decoded = str_decoded.replace(chr(ord('a') - 1), ' ')
+
+    x
 
     print('Original:\n%s' % original)
     print('Decoded:\n%s' % str_decoded)
