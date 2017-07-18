@@ -36,7 +36,7 @@ num_features = 13
 num_classes = ord('z') - ord('a') + 1 + 1 + 1
 
 # Hyper-parameters
-num_epochs = 200
+num_epochs = 2
 num_hidden = 50
 num_layers = 1
 batch_size = 1
@@ -164,10 +164,10 @@ with tf.Session(graph=graph) as session:
     init_op = tf.global_variables_initializer()
 
     #tf.initialize_all_variables().run()
-    session.run(init_op)
-    #save_path = saver.save(session, "model.ckpt")
+    #session.run(init_op)
+    #save_path = saver.save(session, "./orange.ckpt")
     #print("Model saved in file: %s" % save_path)
-    saver.restore(session, "model.ckpt")
+    saver.restore(session, './orange.ckpt')
     print("Model restored.")
 
 
@@ -206,6 +206,8 @@ with tf.Session(graph=graph) as session:
     str_decoded = str_decoded.replace(chr(ord('z') + 1), '')
     # Replacing space label to space
     str_decoded = str_decoded.replace(chr(ord('a') - 1), ' ')
+    #save_path = saver.save(session, "./orange.ckpt")
+    #print("Model saved in file: %s" % save_path)
 
     x
 
