@@ -61,6 +61,7 @@ inputs = mfcc(audio, samplerate=fs)
 train_inputs = np.asarray(inputs[np.newaxis, :])
 train_inputs = (train_inputs - np.mean(train_inputs))/np.std(train_inputs)
 train_seq_len = [train_inputs.shape[1]]
+#print (train_seq_len)
 
 # Readings targets
 with open(target_filename, 'r') as f:
@@ -180,6 +181,7 @@ with tf.Session(graph=graph) as session:
             feed = {inputs: train_inputs,
                     targets: train_targets,
                     seq_len: train_seq_len}
+	    #print ( train_inputs[batch].shape )
 
             batch_cost, _ = session.run([cost, optimizer], feed)
             train_cost += batch_cost*batch_size
