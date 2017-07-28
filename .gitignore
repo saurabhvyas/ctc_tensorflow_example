@@ -1,6 +1,24 @@
 
 # Created by https://www.gitignore.io/api/macos,sublimetext,windows,linux,python,ruby,matlab
 
+	..gitignore.swp
+	5
+	checkpoint
+	model.ckpt-200.data-00000-of-00001
+	model.ckpt-200.index
+	model.ckpt-200.meta
+	model.ckpt.data-00000-of-00001
+	model.ckpt.index
+	model.ckpt.meta
+	multidata.py
+	multidataoriginal.py
+	multidatav2.py
+	multidatav3.py
+	orange.ckpt.data-00000-of-00001
+	orange.ckpt.index
+	orange.ckpt.meta
+
+
 ### macOS ###
 *.DS_Store
 .AppleDouble
