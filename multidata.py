@@ -215,7 +215,7 @@ with graph.as_default():
     ler = tf.reduce_mean(tf.edit_distance(tf.cast(decoded[0], tf.int32),
                                           targets))
 
-    saver = tf.train.Saver()
+    #saver = tf.train.Saver()
 
 with tf.Session(graph=graph) as session:
     # Initializate the weights and biases
@@ -232,8 +232,10 @@ with tf.Session(graph=graph) as session:
 
         for batch in range(num_batches_per_epoch):
 
+            
 	    temp = train_inputs[batch]
-         #   print (temp.shape)
+          #  print (temp.shape)
+	   # print ( train_seq_len[batch] )
 	    #refined_input = np.asarray(temp[np.newaxis, :])
           #  print (train_seq_len[batch])
             feed = {inputs: temp,
@@ -248,8 +250,8 @@ with tf.Session(graph=graph) as session:
         train_ler /= num_examples
 
         val_feed = {inputs: temp,
-                    targets: val_targets[batch],
-                    seq_len: val_seq_len[batch]}
+                    targets:train_targets[batch] ,
+                    seq_len: train_seq_len[batch]}
 
         val_cost, val_ler = session.run([cost, ler], feed_dict=val_feed)
         
@@ -262,9 +264,9 @@ with tf.Session(graph=graph) as session:
     #print(decoded)
     d = session.run(decoded[0], feed_dict=feed)
     
-    print (num_examples)
+   # print (num_examples)
     print(d)
-    for i in range(1,num_examples + 1):
+    for i in range(1, num_examples):
     	str_decoded = ''.join([chr(x) for x in np.asarray(d[i]) + FIRST_INDEX])
     	# Replacing blank label to none
     	str_decoded = str_decoded.replace(chr(ord('z') + 1), '')
@@ -274,6 +276,7 @@ with tf.Session(graph=graph) as session:
     	#print("Model saved in file: %s" % save_path)
 	print('Original:\n%s' % original[i-1])
         print('Decoded:\n%s' % str_decoded)
+
     x
 
    
