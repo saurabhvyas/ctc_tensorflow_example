@@ -37,7 +37,7 @@ num_features = 13
 num_classes = ord('z') - ord('a') + 1 + 1 + 1
 
 # Hyper-parameters
-num_epochs = 50
+num_epochs = 10
 num_hidden = 50
 num_layers = 1
 batch_size = 1
@@ -145,7 +145,7 @@ print (len(train_inputs))
 # We don't have a validation dataset :(
 val_inputs, val_targets, val_seq_len = train_inputs, train_targets, \
                                        train_seq_len
-#print (Train_inputs) 
+#print (train_seq_len) 
 
 # THE MAIN CODE!
 
@@ -234,7 +234,7 @@ with tf.Session(graph=graph) as session:
 
             
 	    temp = train_inputs[batch]
-          #  print (temp.shape)
+            #print (train_targets)
 	   # print ( train_seq_len[batch] )
 	    #refined_input = np.asarray(temp[np.newaxis, :])
           #  print (train_seq_len[batch])
@@ -261,11 +261,19 @@ with tf.Session(graph=graph) as session:
         print(log.format(curr_epoch+1, num_epochs, train_cost, train_ler,
                          val_cost, val_ler, time.time() - start))
     # Decoding
-    #print(decoded)
-    d = session.run(decoded[0], feed_dict=feed)
+    
+    print(train_inputs.values()[0].shape)
+    train_inputs2=np.append(train_inputs.values(), axis=1)
+    print(type(train_inputs2))
+
+    feed2 = {inputs: train_inputs2,
+                    targets: train_targets,
+                    seq_len: train_seq_len}
+    d = session.run(decoded[0], feed_dict=feed2)
     
    # print (num_examples)
     print(d)
+    
     for i in range(1, num_examples):
     	str_decoded = ''.join([chr(x) for x in np.asarray(d[i]) + FIRST_INDEX])
     	# Replacing blank label to none

@@ -183,6 +183,7 @@ with tf.Session(graph=graph) as session:
     # Converting to sparse representation so as to to feed SparseTensor input
     batch_train_targets = sparse_tuple_from(train_targets)
 
+    print(batch_train_inputs.shape)
     feed = {inputs: batch_train_inputs,
             targets: batch_train_targets,
             seq_len: batch_train_seq_len
