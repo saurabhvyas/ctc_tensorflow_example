@@ -81,7 +81,7 @@ for i,j in enumerate(wav_files):
         #print (i,j)
 	audio_filename[i] =  '/home/saurabh/ctc_tensorflow_example/data/' + j + '.wav'
 	#print ( audio_filename[i])
-	print (audio_filename)
+	#print (audio_filename)
 	target_filename[i] =  '/home/saurabh/ctc_tensorflow_example/data/' + j + '.txt'
 	fs[i], audio[i] = wav.read( audio_filename[i])
 	#print (audio[i])
@@ -215,7 +215,7 @@ with graph.as_default():
     ler = tf.reduce_mean(tf.edit_distance(tf.cast(decoded[0], tf.int32),
                                           targets))
 
-    #saver = tf.train.Saver()
+    saver = tf.train.Saver()
 
 with tf.Session(graph=graph) as session:
     # Initializate the weights and biases
@@ -283,8 +283,8 @@ with tf.Session(graph=graph) as session:
     	str_decoded = str_decoded.replace(chr(ord('z') + 1), '')
     	# Replacing space label to space
     	str_decoded = str_decoded.replace(chr(ord('a') - 1), ' ')
-    	#save_path = saver.save(session, "./orange.ckpt")
-    	#print("Model saved in file: %s" % save_path)
+    	save_path = saver.save(session, "./orange.ckpt")
+    	print("Model saved in file: %s" % save_path)
 	print('Original:\n%s' % original[i-1])
         print('Decoded:\n%s' % str_decoded)
 
