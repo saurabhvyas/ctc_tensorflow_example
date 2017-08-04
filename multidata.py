@@ -37,7 +37,7 @@ num_features = 13
 num_classes = ord('z') - ord('a') + 1 + 1 + 1
 
 # Hyper-parameters
-num_epochs = 10
+num_epochs = 1000
 num_hidden = 50
 num_layers = 1
 batch_size = 1
@@ -262,20 +262,23 @@ with tf.Session(graph=graph) as session:
                          val_cost, val_ler, time.time() - start))
     # Decoding
     
-    print(train_inputs.values()[0].shape)
-    train_inputs2=np.append(train_inputs.values(), axis=1)
-    print(type(train_inputs2))
+   # print(train_inputs.values()[0].shape)
+   # train_inputs2=np.append(train_inputs.values(), axis=1)
+   # print(type(train_inputs2))
 
-    feed2 = {inputs: train_inputs2,
-                    targets: train_targets,
-                    seq_len: train_seq_len}
-    d = session.run(decoded[0], feed_dict=feed2)
     
    # print (num_examples)
-    print(d)
+   # print(d)
     
     for i in range(1, num_examples):
-    	str_decoded = ''.join([chr(x) for x in np.asarray(d[i]) + FIRST_INDEX])
+
+        
+        feed2 = {inputs: train_inputs[i-1],
+                    targets: train_targets[i-1],
+                    seq_len: train_seq_len[i-1]}
+        d = session.run(decoded[0], feed_dict=feed2)
+        print (d)
+    	str_decoded = ''.join([chr(x) for x in np.asarray(d[1]) + FIRST_INDEX])
     	# Replacing blank label to none
     	str_decoded = str_decoded.replace(chr(ord('z') + 1), '')
     	# Replacing space label to space
