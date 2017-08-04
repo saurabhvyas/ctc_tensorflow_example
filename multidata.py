@@ -37,7 +37,7 @@ num_features = 13
 num_classes = ord('z') - ord('a') + 1 + 1 + 1
 
 # Hyper-parameters
-num_epochs = 1000
+num_epochs = 10
 num_hidden = 50
 num_layers = 1
 batch_size = 1
@@ -78,10 +78,10 @@ original={}
 
 
 for i,j in enumerate(wav_files):
-        print (i,j)
+        #print (i,j)
 	audio_filename[i] =  '/home/saurabh/ctc_tensorflow_example/data/' + j + '.wav'
-	print ( audio_filename[i])
-	#print (audio_filename)
+	#print ( audio_filename[i])
+	print (audio_filename)
 	target_filename[i] =  '/home/saurabh/ctc_tensorflow_example/data/' + j + '.txt'
 	fs[i], audio[i] = wav.read( audio_filename[i])
 	#print (audio[i])
@@ -89,20 +89,20 @@ for i,j in enumerate(wav_files):
 	
 	#print (temp2)
 	inputs[i] = mfcc(audio[i], samplerate=fs[i])
-	print ( inputs[i].shape , fs[i] )
+	#print ( inputs[i].shape , fs[i] )
 	temp=inputs[i]
 	# Tranform in 3D array
 	
 	train_inputs[i] = np.asarray(temp[np.newaxis, :])
 	train_seq_len[i]=[train_inputs[i].shape[1]]
-	print ("new shape " + str(train_inputs[i].shape))
+	#print ("new shape " + str(train_inputs[i].shape))
 	with open(target_filename[i], 'r') as f:
     
    	 #Only the last line is necessary
     		line = f.readlines()[-1]    
 
    	 # Get only the words between [a-z] and replace period for none
-    		original[i] = ' '.join(line.strip().lower().split(' ')[2:]).replace('.', '')
+    		original[i] = ' '.join(line.strip().lower().split(' ')).replace('.', '')
     		targets[i] = original[i].replace(' ', '  ')
     		targets[i] = targets[i].split(' ')
     	#np.append(Targets,targets)
@@ -123,7 +123,7 @@ for i,j in enumerate(wav_files):
 
 
 #train_inputs = np.concatenate(tuple(train_inputs.values()),axis=1)
-print (len(train_inputs))
+#print (len(train_inputs))
 
 
 
@@ -277,7 +277,7 @@ with tf.Session(graph=graph) as session:
                     targets: train_targets[i-1],
                     seq_len: train_seq_len[i-1]}
         d = session.run(decoded[0], feed_dict=feed2)
-        print (d)
+        #print (d)
     	str_decoded = ''.join([chr(x) for x in np.asarray(d[1]) + FIRST_INDEX])
     	# Replacing blank label to none
     	str_decoded = str_decoded.replace(chr(ord('z') + 1), '')
