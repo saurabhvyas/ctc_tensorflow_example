@@ -1,6 +1,11 @@
-# CTC + Tensorflow Example
+This is my personal CTC based speech recognition playground project using tensorflow , the code is not organized ( I plan to do it , when everything is stable )
 
-A toy example showing how to get CTC cost function working with Tensorflow for automatic speech recognition.
+current capabilities :
+Multidata Training and Inference
+
+Personal Comments : I find tensorflow API unintuitive , and unfriendly , I will enventually switch to pytorch , this is just for playing
+
+Forked from igormq/ctc_tensorflow_example ( Original Author )
 
 ## Requirements
 
@@ -14,4 +19,4 @@ A toy example showing how to get CTC cost function working with Tensorflow for a
 
 This project is licensed under the terms of the MIT license.
 
-See README for more information.
+
