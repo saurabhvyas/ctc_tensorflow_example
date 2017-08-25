@@ -2,6 +2,7 @@
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
+from wer import wer
 
 import time
 
@@ -37,11 +38,11 @@ num_features = 13
 num_classes = ord('z') - ord('a') + 1 + 1 + 1
 
 # Hyper-parameters
-num_epochs = 10
+num_epochs = 5
 num_hidden = 50
 num_layers = 2
 batch_size = 1
-initial_learning_rate = 1e-2
+initial_learning_rate = 7e-5
 momentum = 0.9
 
 
@@ -52,7 +53,7 @@ momentum = 0.9
 from os import listdir
 from os.path import isfile, join
 
-mypath='/home/saurabh/ctc_tensorflow_example/an4/data'
+mypath='/home/saurabh/Desktop/ctc_tensorflow_examplev2/an4/data'
 data_files = [f for f in listdir(mypath) if isfile(join(mypath, f))]
 txt_files = [ fi for fi in data_files if not fi.endswith(".wav") ]
 txt_files = lst = [os.path.splitext(x)[0] for x in txt_files]
@@ -79,10 +80,10 @@ original={}
 
 for i,j in enumerate(wav_files):
         #print (i,j)
-	audio_filename[i] =  '/home/saurabh/ctc_tensorflow_example/an4/data/' + j + '.wav'
+	audio_filename[i] =  '/home/saurabh/Desktop/ctc_tensorflow_examplev2/an4/data/' + j + '.wav'
 	#print ( audio_filename[i])
 	#print (audio_filename)
-	target_filename[i] =  '/home/saurabh/ctc_tensorflow_example/an4/data/' + j + '.txt'
+	target_filename[i] =  '/home/saurabh/Desktop/ctc_tensorflow_examplev2/an4/data/' + j + '.txt'
 	fs[i], audio[i] = wav.read( audio_filename[i])
 	#print (audio[i])
 
@@ -170,8 +171,12 @@ with graph.as_default():
     cell = tf.contrib.rnn.BasicLSTMCell(num_hidden, state_is_tuple=True)
 
     # Stacking rnn cells
+    #[[cell] for _ in range(num_layers)]
     stack =  tf.contrib.rnn.MultiRNNCell([cell] * num_layers,
-                                        state_is_tuple=True)
+                                       state_is_tuple=True)
+
+    #stack =  tf.contrib.rnn.MultiRNNCell([[cell] for _ in range(num_layers)],
+                                       # state_is_tuple=True)
 
     # The second output is the last state and we will no use that
     outputs, _ = tf.nn.dynamic_rnn(stack, inputs, seq_len, dtype=tf.float32)
@@ -221,9 +226,9 @@ with tf.Session(graph=graph) as session:
     # Initializate the weights and biases
     init_op = tf.global_variables_initializer()
 
-    init_op.run()
-   # saver.restore(session, './orange.ckpt')
-   # print("Model restored.")
+    #init_op.run()
+    saver.restore(session, './orange15.ckpt')
+    print("Model restored.")
 
 
     for curr_epoch in range(num_epochs):
@@ -269,7 +274,9 @@ with tf.Session(graph=graph) as session:
     
    # print (num_examples)
    # print(d)
-    
+        totalwer=0
+
+	  
     for i in range(1, num_examples):
 
         
@@ -284,10 +291,13 @@ with tf.Session(graph=graph) as session:
     	# Replacing space label to space
     	str_decoded = str_decoded.replace(chr(ord('a') - 1), ' ')
     	
-	print('Original:\n%s' % original[i-1])
-        print('Decoded:\n%s' % str_decoded)
-    save_path = saver.save(session, "./orange4.ckpt")
-    print("Model saved in file: %s" % save_path)
+	#print('Original:\n%s' % original[i-1])
+        #print('Decoded:\n%s' % str_decoded)
+        totalwer=totalwer + wer(original[i-1].split(),decoded.split())
+	
+    print("average wer = " + str(totalwer/num_examples))
+#    save_path = saver.save(session, "./orange18.ckpt")
+ #   print("Model saved in file: %s" % save_path)
     x
 
    
