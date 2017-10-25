@@ -41,7 +41,7 @@ num_epochs = 10
 num_hidden = 50
 num_layers = 2
 batch_size = 1
-initial_learning_rate = 1e-2
+initial_learning_rate = 1e-4
 momentum = 0.9
 
 
@@ -52,7 +52,7 @@ momentum = 0.9
 from os import listdir
 from os.path import isfile, join
 
-mypath='/home/saurabh/ctc_tensorflow_example/an4/data'
+mypath='/home/saurabh/Documents/ctc_tensorflow_new/an4/data/'
 data_files = [f for f in listdir(mypath) if isfile(join(mypath, f))]
 txt_files = [ fi for fi in data_files if not fi.endswith(".wav") ]
 txt_files = lst = [os.path.splitext(x)[0] for x in txt_files]
@@ -79,10 +79,10 @@ original={}
 
 for i,j in enumerate(wav_files):
         #print (i,j)
-	audio_filename[i] =  '/home/saurabh/ctc_tensorflow_example/an4/data/' + j + '.wav'
+	audio_filename[i] =  '/home/saurabh/Documents/ctc_tensorflow_new/an4/data/' + j + '.wav'
 	#print ( audio_filename[i])
 	#print (audio_filename)
-	target_filename[i] =  '/home/saurabh/ctc_tensorflow_example/an4/data/' + j + '.txt'
+	target_filename[i] =  '/home/saurabh/Documents/ctc_tensorflow_new/an4/data/' + j + '.txt'
 	fs[i], audio[i] = wav.read( audio_filename[i])
 	#print (audio[i])
 
@@ -167,7 +167,7 @@ with graph.as_default():
     # Can be:
     #   tf.nn.rnn_cell.RNNCell
     #   tf.nn.rnn_cell.GRUCell
-    cell = tf.contrib.rnn.LSTMCell(num_hidden, reuse=tf.get_variable_scope().reuse)
+    cell = tf.contrib.rnn.LSTMCell(num_hidden)
 
 
     # Stacking rnn cells

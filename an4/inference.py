@@ -105,7 +105,7 @@ momentum = 0.9
 from os import listdir
 from os.path import isfile, join
 
-mypath='/home/saurabh/Desktop/ctc_tensorflow_examplev2/an4/data'
+mypath='/home/saurabh/Documents/ctc_tensorflow_new/an4/data'
 data_files = [f for f in listdir(mypath) if isfile(join(mypath, f))]
 txt_files = [ fi for fi in data_files if not fi.endswith(".wav") ]
 txt_files = lst = [os.path.splitext(x)[0] for x in txt_files]
@@ -132,10 +132,10 @@ original={}
 
 for i,j in enumerate(wav_files):
         #print (i,j)
-	audio_filename[i] =  '/home/saurabh/Desktop/ctc_tensorflow_examplev2/an4/data/' + j + '.wav'
+	audio_filename[i] =  '/home/saurabh/Documents/ctc_tensorflow_new/an4/data/' + j + '.wav'
 	#print ( audio_filename[i])
 	#print (audio_filename)
-	target_filename[i] =  '/home/saurabh/Desktop/ctc_tensorflow_examplev2/an4/data/' + j + '.txt'
+	target_filename[i] =  '/home/saurabh/Documents/ctc_tensorflow_new/an4/data/' + j + '.txt'
 	fs[i], audio[i] = wav.read( audio_filename[i])
 	#print (audio[i])
 

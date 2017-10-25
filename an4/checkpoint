@@ -1,2 +1,2 @@
-model_checkpoint_path: "orange18.ckpt"
-all_model_checkpoint_paths: "orange18.ckpt"
+model_checkpoint_path: "orange4.ckpt"
+all_model_checkpoint_paths: "orange4.ckpt"
